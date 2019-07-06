@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:gravity="center"
+	android:orientation="vertical"
+	android:focusable="true"
+	android:focusableInTouchMode="true">
+
+	<EditText
+		android:hint="请输入高度，推荐20"
+		android:gravity="center"
+		android:layout_width="wrap_content"
+		android:inputType="number"
+		android:layout_height="wrap_content"
+		android:maxLength="2"
+		android:ems="8"/>
+
+	<LinearLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content">
+
+		<RadioButton
+			android:id="@+id/systemMode_radioButton"
+			android:onClick="systemMode_onClick"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="系统模式"/>
+
+		<RadioButton
+			android:id="@+id/magiskMode_radioButton"
+			android:onClick="magiskMode_onClick"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="面具模式"/>
+
+	</LinearLayout>
+
+	<Button
+        android:onClick="change_onClick"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="点击修改"/>
+    
+</LinearLayout>
