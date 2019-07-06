@@ -11,7 +11,7 @@ public class RootUtils {
     }
 
     /**
-     * Restart SystemUI
+     * 重启SystemUI
      */
     public static void restartSystemUI() {
         killAll("com.android.systemui");
@@ -28,14 +28,14 @@ public class RootUtils {
     }
 
     /**
-     * Reboot
+     * 重启
      */
     public static void reboot() {
         Shell.SU.run("reboot");
     }
 
     /**
-     * Soft Reboot
+     * 软重启
      */
     public static void softReboot() {
         Shell.SU.run("setprop ctl.restart surfaceflinger; setprop ctl.restart zygote");

@@ -20,8 +20,17 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        checkRoot();
-        magiskCheck();
+        checkRoot(); // 检测ROOT
+        RadioButton magisk = findViewById(R.id.magiskMode_radioButton);
+        RadioButton system = findViewById(R.id.systemMode_radioButton);
+        if(magiskCheck()) // 检测Magisk
+        {
+            magisk.setChecked(true);
+        }else
+        {
+            system.setChecked(true);
+            magisk.setEnabled(false);
+        }
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -33,22 +42,22 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()){
             case R.id.reboot:
                 checkRoot();
-                RootUtils.reboot();
+                RootUtils.reboot(); // 重启
                 break;
             case R.id.soft_Reboot:
                 checkRoot();
-                RootUtils.softReboot();
+                RootUtils.softReboot(); // 软重启
                 break;
             case R.id.restart_SystemUI:
                 checkRoot();
-                RootUtils.restartSystemUI();
+                RootUtils.restartSystemUI(); // 重启SystemUI
                 break;
             default:
         }
         return true;
     }
     public void change_onClick(View view){
-        Toast t = Toast.makeText(this, "APP制作的，暂时无法修改！", Toast.LENGTH_LONG);
+        Toast t = Toast.makeText(this, "APP制作中，暂时无法修改！", Toast.LENGTH_LONG);
         t.show();
     }
     public void systemMode_onClick(View view)
@@ -87,17 +96,15 @@ public class MainActivity extends AppCompatActivity
             finish();
         }
     }
-    private void magiskCheck()
+    private boolean magiskCheck()
     {
         if (RootTools.exists("/data/adb/magisk", true))
         {
-            RadioButton r = findViewById(R.id.magiskMode_radioButton);
-            r.setChecked(true);
+            return true;
         }
         else
         {
-            RadioButton rr = findViewById(R.id.systemMode_radioButton);
-            rr.setChecked(true);
+            return false;
         }
     }
 }
