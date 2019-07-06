@@ -2,14 +2,19 @@ package cn.iqianye.miui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
-import com.stericson.RootTools.RootTools;
-import com.stericson.RootShell.execution.Command;
-import android.view.Menu;
 import cn.iqianye.miui.utils.RootUtils;
-import android.view.MenuItem;
+import cn.iqianye.miui.utils.XmlUtils;
+import com.stericson.RootTools.RootTools;
+import cn.iqianye.miui.utils.ZipUtil;
+import java.io.IOException;
+import cn.iqianye.miui.utils.AssetsUtils;
+import com.jaredrummler.android.shell.Shell;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -23,14 +28,17 @@ public class MainActivity extends AppCompatActivity
         checkRoot(); // 检测ROOT
         RadioButton magisk = findViewById(R.id.magiskMode_radioButton);
         RadioButton system = findViewById(R.id.systemMode_radioButton);
-        if(magiskCheck()) // 检测Magisk
+        if (magiskCheck()) // 检测Magisk
         {
             magisk.setChecked(true);
-        }else
+            AssetsUtils.copyFolderFromAssetsToSD(this, "Z-MiuiStatusBar",getExternalCacheDir().getAbsolutePath() + "/Z-MiuiStatusBar");
+        }
+        else
         {
             system.setChecked(true);
             magisk.setEnabled(false);
         }
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -38,8 +46,10 @@ public class MainActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
             case R.id.reboot:
                 checkRoot();
                 RootUtils.reboot(); // 重启
@@ -56,9 +66,58 @@ public class MainActivity extends AppCompatActivity
         }
         return true;
     }
-    public void change_onClick(View view){
-        Toast t = Toast.makeText(this, "APP制作中，暂时无法修改！", Toast.LENGTH_LONG);
-        t.show();
+    public void change_onClick(View view)
+    {
+        RadioButton system = findViewById(R.id.systemMode_radioButton);
+        RadioButton magisk = findViewById(R.id.magiskMode_radioButton);
+        EditText height = findViewById(R.id.height_editText);
+        String path = getExternalCacheDir().getAbsolutePath();
+        String filename = path + "/theme_values.xml";
+        if (height.getText().toString().trim().isEmpty())
+        {
+            Toast.makeText(this, "高度不能为空", Toast.LENGTH_LONG).show();
+            return;
+        }else
+        {
+            XmlUtils.xmlSave(filename, height.getText().toString() + "dp");
+            try
+            {
+                ZipUtil.zip(path + "/framework-res", "", filename);
+            }
+            catch (IOException e)
+            {
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }
+        if (system.isChecked())
+        {
+            Shell.SU.run("cp -r " + path + "/framework-res /system/media/theme/default/");
+            Shell.SU.run("chmod 644 /system/media/theme/default/framework-res");
+            Toast.makeText(this, "修改成功，清点击右上角重启System查看效果", Toast.LENGTH_LONG).show();
+        }
+        else if (magisk.isChecked())
+        {
+            Shell.SU.run("cp -r " + path + "/framework-res " + path + "/Z-MiuiStatusBar/system/media/theme/default");
+            Shell.SU.run("cp -r " + path + "/Z-MiuiStatusBar /data/adb/modules");
+            Shell.SU.run("chmod 644 /data/adb/modules/Z-MiuiStatusBar/system/media/theme/default/framework-res");
+            Shell.SU.run("chmod 644 /data/adb/modules/Z-MiuiStatusBar/module.prop");
+            Toast.makeText(this, "修改成功，清点击右上角重启查看效果", Toast.LENGTH_LONG).show();
+        }
+    }
+    public void delete_onClick(View view)
+    {
+        RadioButton system = findViewById(R.id.systemMode_radioButton);
+        RadioButton magisk = findViewById(R.id.magiskMode_radioButton);
+        if (system.isChecked())
+        {
+            Shell.SU.run("rm -rf /system/media/theme/default/framework-res");
+            Toast.makeText(this, "还原成功，清点击右上角重启System查看效果", Toast.LENGTH_LONG).show();
+        }
+        else if (magisk.isChecked())
+        {
+            Shell.SU.run("rm -rf /data/adb/modules/Z-MiuiStatusBar");
+            Toast.makeText(this, "还原成功，清点击右上角重启查看效果", Toast.LENGTH_LONG).show();
+        }
     }
     public void systemMode_onClick(View view)
     {
@@ -84,15 +143,13 @@ public class MainActivity extends AppCompatActivity
         {
             if (!RootTools.isAccessGiven())
             {
-                Toast t = Toast.makeText(this, "ROOT权限获取失败，请检查！", Toast.LENGTH_LONG);
-                t.show();
+                Toast.makeText(this, "ROOT权限获取失败，请检查！", Toast.LENGTH_LONG).show();
                 finish();
             }
         }
         else
         {
-            Toast t = Toast.makeText(this, "您的设备没有ROOT，无法使用！", Toast.LENGTH_LONG);
-            t.show();
+            Toast.makeText(this, "您的设备没有ROOT，无法使用！", Toast.LENGTH_LONG).show();
             finish();
         }
     }
@@ -107,4 +164,5 @@ public class MainActivity extends AppCompatActivity
             return false;
         }
     }
+
 }

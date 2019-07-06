@@ -7,9 +7,9 @@ android {
     defaultConfig {
         applicationId "cn.iqianye.miui"
         minSdkVersion 16
-        targetSdkVersion 27
-        versionCode 190706
-        versionName "0.0.2 Alpha"
+        targetSdkVersion 29
+        versionCode 1907062
+        versionName "1.0.0"
     }
     buildTypes {
         release {

@@ -9,6 +9,7 @@
 	android:focusableInTouchMode="true">
 
 	<EditText
+        android:id="@+id/height_editText"
 		android:hint="请输入高度，推荐20"
 		android:gravity="center"
 		android:layout_width="wrap_content"
@@ -37,10 +38,21 @@
 
 	</LinearLayout>
 
-	<Button
-        android:onClick="change_onClick"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="点击修改"/>
-    
+	<LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <Button
+            android:onClick="change_onClick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="修改"/>
+
+        <Button
+            android:onClick="delete_onClick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="还原"/>
+
+    </LinearLayout>
+
 </LinearLayout>
