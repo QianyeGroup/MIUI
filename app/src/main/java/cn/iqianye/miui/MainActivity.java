@@ -15,6 +15,7 @@ import cn.iqianye.miui.utils.ZipUtil;
 import java.io.IOException;
 import cn.iqianye.miui.utils.AssetsUtils;
 import com.jaredrummler.android.shell.Shell;
+import cn.iqianye.miui.utils.OtherUtils;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -25,6 +26,11 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if(!OtherUtils.isMIUI()) // 检测MIUI
+        {
+            Toast.makeText(this, "您使用的系统非MIUI，不能使用本软件", Toast.LENGTH_LONG).show();
+            finish();
+        }
         checkRoot(); // 检测ROOT
         RadioButton magisk = findViewById(R.id.magiskMode_radioButton);
         RadioButton system = findViewById(R.id.systemMode_radioButton);
