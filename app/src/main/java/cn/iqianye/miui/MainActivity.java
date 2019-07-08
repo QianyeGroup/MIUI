@@ -8,14 +8,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
+import cn.iqianye.miui.utils.AssetsUtils;
+import cn.iqianye.miui.utils.OtherUtils;
 import cn.iqianye.miui.utils.RootUtils;
 import cn.iqianye.miui.utils.XmlUtils;
-import com.stericson.RootTools.RootTools;
 import cn.iqianye.miui.utils.ZipUtil;
-import java.io.IOException;
-import cn.iqianye.miui.utils.AssetsUtils;
 import com.jaredrummler.android.shell.Shell;
-import cn.iqianye.miui.utils.OtherUtils;
+import com.stericson.RootTools.RootTools;
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if(!OtherUtils.isMIUI()) // 检测MIUI
+        if (!OtherUtils.isMIUI()) // 检测MIUI
         {
             Toast.makeText(this, "您使用的系统非MIUI，不能使用本软件", Toast.LENGTH_LONG).show();
             finish();
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity
         if (magiskCheck()) // 检测Magisk
         {
             magisk.setChecked(true);
-            AssetsUtils.copyFolderFromAssetsToSD(this, "Z-MiuiStatusBar",getExternalCacheDir().getAbsolutePath() + "/Z-MiuiStatusBar");
+            AssetsUtils.copyFolderFromAssetsToSD(this, "Z-MiuiStatusBar", getExternalCacheDir().getAbsolutePath() + "/Z-MiuiStatusBar");
         }
         else
         {
@@ -83,7 +83,8 @@ public class MainActivity extends AppCompatActivity
         {
             Toast.makeText(this, "高度不能为空", Toast.LENGTH_LONG).show();
             return;
-        }else
+        }
+        else
         {
             XmlUtils.xmlSave(filename, height.getText().toString() + "dp");
             try
@@ -99,7 +100,7 @@ public class MainActivity extends AppCompatActivity
         {
             Shell.SU.run("cp -r " + path + "/framework-res /system/media/theme/default/");
             Shell.SU.run("chmod 644 /system/media/theme/default/framework-res");
-            Toast.makeText(this, "修改成功，清点击右上角重启System查看效果", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "修改成功，请点击右上角重启SystemUI查看效果", Toast.LENGTH_LONG).show();
         }
         else if (magisk.isChecked())
         {
@@ -107,7 +108,7 @@ public class MainActivity extends AppCompatActivity
             Shell.SU.run("cp -r " + path + "/Z-MiuiStatusBar /data/adb/modules");
             Shell.SU.run("chmod 644 /data/adb/modules/Z-MiuiStatusBar/system/media/theme/default/framework-res");
             Shell.SU.run("chmod 644 /data/adb/modules/Z-MiuiStatusBar/module.prop");
-            Toast.makeText(this, "修改成功，清点击右上角重启查看效果", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "修改成功，请点击右上角重启查看效果", Toast.LENGTH_LONG).show();
         }
     }
     public void delete_onClick(View view)
@@ -117,12 +118,12 @@ public class MainActivity extends AppCompatActivity
         if (system.isChecked())
         {
             Shell.SU.run("rm -rf /system/media/theme/default/framework-res");
-            Toast.makeText(this, "还原成功，清点击右上角重启System查看效果", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "还原成功，请点击右上角重启SystemUI查看效果", Toast.LENGTH_LONG).show();
         }
         else if (magisk.isChecked())
         {
             Shell.SU.run("rm -rf /data/adb/modules/Z-MiuiStatusBar");
-            Toast.makeText(this, "还原成功，清点击右上角重启查看效果", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "还原成功，请点击右上角重启查看效果", Toast.LENGTH_LONG).show();
         }
     }
     public void systemMode_onClick(View view)
