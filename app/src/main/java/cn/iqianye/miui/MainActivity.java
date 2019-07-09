@@ -16,6 +16,7 @@ import cn.iqianye.miui.utils.ZipUtil;
 import com.jaredrummler.android.shell.Shell;
 import com.stericson.RootTools.RootTools;
 import java.io.IOException;
+import android.content.Intent;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -125,6 +126,20 @@ public class MainActivity extends AppCompatActivity
             Shell.SU.run("rm -rf /data/adb/modules/Z-MiuiStatusBar");
             Toast.makeText(this, "还原成功，请点击右上角重启查看效果", Toast.LENGTH_LONG).show();
         }
+    }
+    public void superPower_onClick(View view)
+    {
+        Intent intent = new Intent();
+        intent.setClassName("com.miui.powerkeeper", "com.miui.powerkeeper.ui.ExtremePowerEntryActivity");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+    public void androidPower_onClick(View view)
+    {
+        Intent intent = new Intent();
+        intent.setClassName("com.android.settings", "com.android.settings.fuelgauge.PowerUsageSummary");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
     public void systemMode_onClick(View view)
     {

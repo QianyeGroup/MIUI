@@ -54,5 +54,31 @@
             android:text="还原"/>
 
     </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="小工具"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <Button
+            android:onClick="superPower_onClick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="打开极致省电模式"/>
+
+        <Button
+            android:onClick="androidPower_onClick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="安卓原生电量曲线"/>
+
+    </LinearLayout>
 
 </LinearLayout>
