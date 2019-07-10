@@ -1,5 +1,7 @@
 package cn.iqianye.miui;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -7,19 +9,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 import cn.iqianye.miui.utils.AssetsUtils;
 import cn.iqianye.miui.utils.OtherUtils;
 import cn.iqianye.miui.utils.RootUtils;
 import cn.iqianye.miui.utils.XmlUtils;
-import cn.iqianye.miui.utils.ZipUtil;
+import cn.iqianye.miui.utils.ZipUtils;
 import com.jaredrummler.android.shell.Shell;
 import com.stericson.RootTools.RootTools;
 import java.io.IOException;
-import android.content.Intent;
+import java.net.URI;
+import android.net.Uri;
 
 public class MainActivity extends AppCompatActivity
 {
+    Boolean notSupportDevice = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -32,6 +37,8 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(this, "您使用的系统非MIUI，不能使用本软件", Toast.LENGTH_LONG).show();
             finish();
         }
+        TextView t = findViewById(R.id.device_TextView);
+        t.setText(Build.BRAND + " " + Build.MODEL);
         checkRoot(); // 检测ROOT
         RadioButton magisk = findViewById(R.id.magiskMode_radioButton);
         RadioButton system = findViewById(R.id.systemMode_radioButton);
@@ -69,6 +76,27 @@ public class MainActivity extends AppCompatActivity
                 checkRoot();
                 RootUtils.restartSystemUI(); // 重启SystemUI
                 break;
+            case R.id.join_Group:
+                joinQQGroup("POi0sGneG6tKk4sDLTHDevyaIFWH6C4a");
+                break;
+            case R.id.feedback:
+                Intent data=new Intent(Intent.ACTION_SENDTO);  
+                data.setData(Uri.parse("mailto:service@iqianye.cn"));  
+                data.putExtra(Intent.EXTRA_SUBJECT, "【意见反馈】修改MIUI状态栏高度APP");  
+                data.putExtra(Intent.EXTRA_TEXT, 
+                              "设备型号：" 
+                              + Build.BRAND + " " 
+                              + Build.MODEL + " (" 
+                              + Build.DEVICE + ")<br>"
+                              + "系统版本："
+                              + Shell.SH.run("getprop ro.miui.ui.version.name").toString() + " "
+                              + Shell.SH.run("getprop ro.build.version.incremental").toString() + "<br>"
+                              + "问题描述：<br><br>"
+                              + "联系方式：<br>"
+
+                              );  
+                startActivity(data);
+                break;
             default:
         }
         return true;
@@ -90,7 +118,7 @@ public class MainActivity extends AppCompatActivity
             XmlUtils.xmlSave(filename, height.getText().toString() + "dp");
             try
             {
-                ZipUtil.zip(path + "/framework-res", "", filename);
+                ZipUtils.zip(path + "/framework-res", "", filename);
             }
             catch (IOException e)
             {
@@ -186,5 +214,30 @@ public class MainActivity extends AppCompatActivity
             return false;
         }
     }
+    /****************
+     *
+     * 发起添加群流程。群号：真心极客 - Redmi K20/Pro |(691802087) 的 key 为： POi0sGneG6tKk4sDLTHDevyaIFWH6C4a
+     * 调用 joinQQGroup(POi0sGneG6tKk4sDLTHDevyaIFWH6C4a) 即可发起手Q客户端申请加群 真心极客 - Redmi K20/Pro |(691802087)
+     *
+     * @param key 由官网生成的key
+     * @return 返回true表示呼起手Q成功，返回fals表示呼起失败
+     ******************/
+    public boolean joinQQGroup(String key)
+    {
+        Intent intent = new Intent();
+        intent.setData(Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3D" + key));
+        // 此Flag可根据具体产品需要自定义，如设置，则在加群界面按返回，返回手Q主界面，不设置，按返回会返回到呼起产品界面    //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        try
+        {
+            startActivity(intent);
+            return true;
+        }
+        catch (Exception e)
+        {
+            // 未安装手Q或安装的版本不支持
+            return false;
+        }
+    }
+
 
 }

@@ -8,8 +8,8 @@ android {
         applicationId "cn.iqianye.miui"
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 1907090
-        versionName "1.0.4"
+        versionCode 1907100
+        versionName "1.0.5"
     }
     buildTypes {
         release {
