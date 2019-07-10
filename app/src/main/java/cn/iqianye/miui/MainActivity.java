@@ -1,6 +1,7 @@
 package cn.iqianye.miui;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,8 +20,6 @@ import cn.iqianye.miui.utils.ZipUtils;
 import com.jaredrummler.android.shell.Shell;
 import com.stericson.RootTools.RootTools;
 import java.io.IOException;
-import java.net.URI;
-import android.net.Uri;
 
 public class MainActivity extends AppCompatActivity
 {
