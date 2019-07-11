@@ -8,8 +8,8 @@ android {
         applicationId "cn.iqianye.miui"
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 1907100
-        versionName "1.0.5"
+        versionCode 1907101
+        versionName "1.0.6"
     }
     buildTypes {
         release {
@@ -25,5 +25,8 @@ dependencies {
     api 'com.android.support:design:27.1.1'
     api 'com.android.support:cardview-v7:27.1.1'
     
+    // Android Shell
+    api 'com.jaredrummler:android-shell:1.0.0'
+
     api fileTree(dir: 'libs', include: ['*.jar'])
 }
