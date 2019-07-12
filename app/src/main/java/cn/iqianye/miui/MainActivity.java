@@ -1,5 +1,7 @@
 package cn.iqianye.miui;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -18,12 +20,10 @@ import cn.iqianye.miui.utils.RootUtils;
 import cn.iqianye.miui.utils.XmlUtils;
 import cn.iqianye.miui.utils.ZipUtils;
 import com.jaredrummler.android.shell.Shell;
-import com.stericson.RootTools.RootTools;
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity
 {
-    Boolean notSupportDevice = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -31,17 +31,21 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if (!OtherUtils.checkRoot()) // 检测ROOT
+        {
+            Toast.makeText(this, "获取ROOT权限失败，请检查是否已给予本软件ROOT权限！", Toast.LENGTH_LONG).show();
+            finish();
+        }
         if (!OtherUtils.isMIUI()) // 检测MIUI
         {
-            Toast.makeText(this, "您使用的系统非MIUI，不能使用本软件", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "您使用的系统非MIUI，不能使用本软件！", Toast.LENGTH_LONG).show();
             finish();
         }
         TextView t = findViewById(R.id.device_TextView);
         t.setText(Build.BRAND + " " + Build.MODEL);
-        checkRoot(); // 检测ROOT
         RadioButton magisk = findViewById(R.id.magiskMode_radioButton);
         RadioButton system = findViewById(R.id.systemMode_radioButton);
-        if (magiskCheck()) // 检测Magisk
+        if (OtherUtils.magiskCheck()) // 检测Magisk
         {
             magisk.setChecked(true);
             AssetsUtils.copyFolderFromAssetsToSD(this, "Z-MiuiStatusBar", getExternalCacheDir().getAbsolutePath() + "/Z-MiuiStatusBar");
@@ -64,16 +68,46 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId())
         {
             case R.id.reboot:
-                checkRoot();
-                RootUtils.reboot(); // 重启
+                AlertDialog.Builder b1 = new AlertDialog.Builder(this);
+                b1.setTitle("确认");
+                b1.setMessage("是否确认重启？");
+                b1.setPositiveButton("是", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface d, int i)
+                        {
+                            RootUtils.reboot(); // 重启
+                        }
+                    });
+                b1.setNegativeButton("否", null);
+                b1.show();
                 break;
             case R.id.soft_Reboot:
-                checkRoot();
-                RootUtils.softReboot(); // 软重启
+                AlertDialog.Builder b2 = new AlertDialog.Builder(this);
+                b2.setTitle("确认");
+                b2.setMessage("是否确认软重启？"); 
+                b2.setPositiveButton("是", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface d, int i)
+                        {
+                            RootUtils.softReboot(); // 软重启
+                        }
+                    });
+                b2.setNegativeButton("否", null);
+                b2.show();
                 break;
             case R.id.restart_SystemUI:
-                checkRoot();
-                RootUtils.restartSystemUI(); // 重启SystemUI
+                AlertDialog.Builder b3 = new AlertDialog.Builder(this);
+                b3.setTitle("确认");
+                b3.setMessage("是否确认重启SystemUI？"); 
+                b3.setPositiveButton("是", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface d, int i)
+                        {
+                            RootUtils.restartSystemUI(); // 重启SystemUI
+                        }
+                    });
+                b3.setNegativeButton("否", null);
+                b3.show();   
                 break;
             case R.id.join_Group:
                 joinQQGroup("POi0sGneG6tKk4sDLTHDevyaIFWH6C4a");
@@ -186,46 +220,21 @@ public class MainActivity extends AppCompatActivity
             system.setChecked(false);
         }
     }
-    private void checkRoot()
-    {
-        if (RootTools.isRootAvailable())
-        {
-            if (!RootTools.isAccessGiven())
-            {
-                Toast.makeText(this, "ROOT权限获取失败，请检查！", Toast.LENGTH_LONG).show();
-                finish();
-            }
-        }
-        else
-        {
-            Toast.makeText(this, "您的设备没有ROOT，无法使用！", Toast.LENGTH_LONG).show();
-            finish();
-        }
-    }
-    private boolean magiskCheck()
-    {
-        if (RootTools.exists("/data/adb/magisk", true))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+
     /****************
      *
      * 发起添加群流程。群号：真心极客 - Redmi K20/Pro |(691802087) 的 key 为： POi0sGneG6tKk4sDLTHDevyaIFWH6C4a
      * 调用 joinQQGroup(POi0sGneG6tKk4sDLTHDevyaIFWH6C4a) 即可发起手Q客户端申请加群 真心极客 - Redmi K20/Pro |(691802087)
      *
      * @param key 由官网生成的key
-     * @return 返回true表示呼起手Q成功，返回fals表示呼起失败
+     * @return 返回true表示呼起手Q成功，返回false表示呼起失败
      ******************/
     public boolean joinQQGroup(String key)
     {
         Intent intent = new Intent();
         intent.setData(Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3D" + key));
-        // 此Flag可根据具体产品需要自定义，如设置，则在加群界面按返回，返回手Q主界面，不设置，按返回会返回到呼起产品界面    //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        // 此Flag可根据具体产品需要自定义，如设置，则在加群界面按返回，返回手Q主界面，不设置，按返回会返回到呼起产品界面
+        //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         try
         {
             startActivity(intent);
@@ -234,9 +243,8 @@ public class MainActivity extends AppCompatActivity
         catch (Exception e)
         {
             // 未安装手Q或安装的版本不支持
+            Toast.makeText(this, "未安装手机QQ，或版本不支持。请安装或升级手机QQ！", Toast.LENGTH_LONG).show();
             return false;
         }
     }
-
-
 }
