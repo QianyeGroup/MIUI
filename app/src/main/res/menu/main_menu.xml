@@ -4,17 +4,17 @@
 
     <item
         android:id="@+id/reboot"
-        android:title="重启"/>
+        android:title="@string/reboot"/>
     <item
         android:id="@+id/soft_Reboot"
-        android:title="软重启"/>
+        android:title="@string/soft_reboot"/>
     <item
         android:id="@+id/restart_SystemUI"
-        android:title="重启SystemUI"/>
+        android:title="@string/restart_systemui"/>
     <item
         android:id="@+id/join_Group"
-        android:title="加群交流"/>
+        android:title="@string/join_group"/>
     <item
         android:id="@+id/feedback"
-        android:title="意见反馈"/>
+        android:title="@string/feedback"/>
 </menu>

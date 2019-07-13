@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">修改MIUI状态栏高度</string>
+    <string name="no_root">获取ROOT权限失败，请检查是否给予本软件ROOT权限！</string>
+    <string name="no_miui">你的设备ROM非MIUI，不能使用本软件！</string>
+    <string name="dialog_title">确认</string>
+    <string name="dialog_reboot">确认重启设备？</string>
+    <string name="dialog_soft_reboot">确认软重启设备？</string>
+    <string name="dialog_restart_systemui">确认重启SystemUI？</string>
+    <string name="yes">确认</string>
+    <string name="no">取消</string>
+    <string name="reboot">重启</string>
+    <string name="soft_reboot">软重启</string>
+    <string name="restart_systemui">重启SystemUI</string>
+    <string name="join_group">加入QQ群</string>
+    <string name="feedback">意见反馈</string>
+    <string name="no_qq">未安装QQ，或版本不支持！</string>
+    <string name="height_not_void">高度不能为空！</string>
+    <string name="change_success_system">修改成功，请点击右上角菜单重启SystemUI查看效果！</string>
+    <string name="delete_success_system">还原成功，请点击右上角菜单重启SystemUI查看效果！</string>
+    <string name="change_success_magisk">修改成功，请点击右上角菜单重启查看效果！</string>
+    <string name="delete_success_magisk">>还原成功，请点击右上角菜单重启查看效果！</string>
+    <string name="system_mode">系统模式</string>
+    <string name="magisk_mode">面具模式</string>
+    <string name="change">修改</string>
+    <string name="delete">还原</string>
+    <string name="mini_tools">小工具</string>
+    <string name="super_battery">打开极致省电模式</string>
+    <string name="android_battery">安卓原生电量曲线</string>
+    <string name="edit_text">请输入高度，推荐20</string>
+    
+</resources>

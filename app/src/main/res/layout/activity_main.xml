@@ -27,7 +27,7 @@
 
 	<EditText
 		android:id="@+id/height_editText"
-		android:hint="请输入高度，推荐20"
+		android:hint="@string/edit_text"
 		android:gravity="center"
 		android:layout_width="wrap_content"
 		android:inputType="number"
@@ -44,14 +44,14 @@
 			android:onClick="systemMode_onClick"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="系统模式"/>
+			android:text="@string/system_mode"/>
 
 		<RadioButton
 			android:id="@+id/magiskMode_radioButton"
 			android:onClick="magiskMode_onClick"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="面具模式"/>
+			android:text="@string/magisk_mode"/>
 
 	</LinearLayout>
 
@@ -63,13 +63,13 @@
 			android:onClick="change_onClick"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="修改"/>
+			android:text="@string/change"/>
 
 		<Button
 			android:onClick="delete_onClick"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="还原"/>
+			android:text="@string/delete"/>
 
 	</LinearLayout>
 
@@ -84,7 +84,7 @@
 	<TextView
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="小工具"/>
+		android:text="@string/mini_tools"/>
 
 	<LinearLayout
 		android:layout_width="wrap_content"
@@ -94,13 +94,13 @@
 			android:onClick="superPower_onClick"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="打开极致省电模式"/>
+			android:text="@string/super_battery"/>
 
 		<Button
 			android:onClick="androidPower_onClick"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="安卓原生电量曲线"/>
+			android:text="@string/android_battery"/>
 
 	</LinearLayout>
 

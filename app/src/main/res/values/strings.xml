@@ -1,5 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">修改MIUI状态栏高度</string>
+    <string name="app_name">Change MIUI Status Bar Height</string>
+    <string name="no_root">Get ROOT permission failed!</string>
+    <string name="no_miui">Your device not MIUI!</string>
+    <string name="dialog_title">Confirm</string>
+    <string name="dialog_reboot">You sure reboot device?</string>
+    <string name="dialog_soft_reboot">You sure soft reboot device?</string>
+    <string name="dialog_restart_systemui">You sure restart SystemUI?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="reboot">Reboot</string>
+    <string name="soft_reboot">Soft Reboot</string>
+    <string name="restart_systemui">Restart SystemUI</string>
+    <string name="join_group">Join QQ Group</string>
+    <string name="feedback">Feedback</string>
+    <string name="no_qq">Please install mobile QQ!</string>
+    <string name="height_not_void">Height not void!</string>
+    <string name="change_success_system">Change success,Please click menu Restart SystemUI!</string>
+    <string name="delete_success_system">Delete success,Please click menu Restart SystemUI!</string>
+    <string name="change_success_magisk">Change success,Please click menu Reboot!</string>
+    <string name="delete_success_magisk">Delete success,Please click menu Reboot!</string>
+    <string name="system_mode">System Mode</string>
+    <string name="magisk_mode">Magisk Mode</string>
+    <string name="change">Change</string>
+    <string name="delete">Delete</string>
+    <string name="mini_tools">Mini tools (MIUI China)</string>
+    <string name="super_battery">Super Power Saving Mode</string>
+    <string name="android_battery">Android Chart</string>
+    <string name="edit_text">Input height.</string>
     
 </resources>

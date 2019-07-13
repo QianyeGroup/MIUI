@@ -33,12 +33,12 @@ public class MainActivity extends AppCompatActivity
 
         if (!OtherUtils.checkRoot()) // 检测ROOT
         {
-            Toast.makeText(this, "获取ROOT权限失败，请检查是否已给予本软件ROOT权限！", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.no_root, Toast.LENGTH_LONG).show();
             finish();
         }
         if (!OtherUtils.isMIUI()) // 检测MIUI
         {
-            Toast.makeText(this, "您使用的系统非MIUI，不能使用本软件！", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.no_miui, Toast.LENGTH_LONG).show();
             finish();
         }
         TextView t = findViewById(R.id.device_TextView);
@@ -69,44 +69,44 @@ public class MainActivity extends AppCompatActivity
         {
             case R.id.reboot:
                 AlertDialog.Builder b1 = new AlertDialog.Builder(this);
-                b1.setTitle("确认");
-                b1.setMessage("是否确认重启？");
-                b1.setPositiveButton("是", new DialogInterface.OnClickListener()
+                b1.setTitle(R.string.dialog_title);
+                b1.setMessage(R.string.dialog_reboot);
+                b1.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener()
                     {
                         public void onClick(DialogInterface d, int i)
                         {
                             RootUtils.reboot(); // 重启
                         }
                     });
-                b1.setNegativeButton("否", null);
+                b1.setNegativeButton(R.string.no, null);
                 b1.show();
                 break;
             case R.id.soft_Reboot:
                 AlertDialog.Builder b2 = new AlertDialog.Builder(this);
-                b2.setTitle("确认");
-                b2.setMessage("是否确认软重启？"); 
-                b2.setPositiveButton("是", new DialogInterface.OnClickListener()
+                b2.setTitle(R.string.dialog_title);
+                b2.setMessage(R.string.dialog_soft_reboot); 
+                b2.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener()
                     {
                         public void onClick(DialogInterface d, int i)
                         {
                             RootUtils.softReboot(); // 软重启
                         }
                     });
-                b2.setNegativeButton("否", null);
+                b2.setNegativeButton(R.string.no, null);
                 b2.show();
                 break;
             case R.id.restart_SystemUI:
                 AlertDialog.Builder b3 = new AlertDialog.Builder(this);
-                b3.setTitle("确认");
-                b3.setMessage("是否确认重启SystemUI？"); 
-                b3.setPositiveButton("是", new DialogInterface.OnClickListener()
+                b3.setTitle(R.string.dialog_title);
+                b3.setMessage(R.string.dialog_restart_systemui); 
+                b3.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener()
                     {
                         public void onClick(DialogInterface d, int i)
                         {
                             RootUtils.restartSystemUI(); // 重启SystemUI
                         }
                     });
-                b3.setNegativeButton("否", null);
+                b3.setNegativeButton(R.string.no, null);
                 b3.show();   
                 break;
             case R.id.join_Group:
@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity
         String filename = path + "/theme_values.xml";
         if (height.getText().toString().trim().isEmpty())
         {
-            Toast.makeText(this, "高度不能为空", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.height_not_void, Toast.LENGTH_LONG).show();
             return;
         }
         else
@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity
         {
             Shell.SU.run("cp -r " + path + "/framework-res /system/media/theme/default/");
             Shell.SU.run("chmod 644 /system/media/theme/default/framework-res");
-            Toast.makeText(this, "修改成功，请点击右上角重启SystemUI查看效果", Toast.LENGTH_LONG).show();
+            Toast.makeText(this,R.string.change_success_system, Toast.LENGTH_LONG).show();
         }
         else if (magisk.isChecked())
         {
@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity
             Shell.SU.run("cp -r " + path + "/Z-MiuiStatusBar /data/adb/modules");
             Shell.SU.run("chmod 644 /data/adb/modules/Z-MiuiStatusBar/system/media/theme/default/framework-res");
             Shell.SU.run("chmod 644 /data/adb/modules/Z-MiuiStatusBar/module.prop");
-            Toast.makeText(this, "修改成功，请点击右上角重启查看效果", Toast.LENGTH_LONG).show();
+            Toast.makeText(this,R.string.change_success_magisk, Toast.LENGTH_LONG).show();
         }
     }
     public void delete_onClick(View view)
@@ -180,12 +180,12 @@ public class MainActivity extends AppCompatActivity
         if (system.isChecked())
         {
             Shell.SU.run("rm -rf /system/media/theme/default/framework-res");
-            Toast.makeText(this, "还原成功，请点击右上角重启SystemUI查看效果", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.delete_success_system, Toast.LENGTH_LONG).show();
         }
         else if (magisk.isChecked())
         {
             Shell.SU.run("rm -rf /data/adb/modules/Z-MiuiStatusBar");
-            Toast.makeText(this, "还原成功，请点击右上角重启查看效果", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.delete_success_magisk, Toast.LENGTH_LONG).show();
         }
     }
     public void superPower_onClick(View view)
@@ -243,7 +243,7 @@ public class MainActivity extends AppCompatActivity
         catch (Exception e)
         {
             // 未安装手Q或安装的版本不支持
-            Toast.makeText(this, "未安装手机QQ，或版本不支持。请安装或升级手机QQ！", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.no_qq, Toast.LENGTH_LONG).show();
             return false;
         }
     }
