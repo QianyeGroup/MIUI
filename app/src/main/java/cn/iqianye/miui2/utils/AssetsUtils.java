@@ -1,4 +1,4 @@
-package cn.iqianye.miui.utils;
+package cn.iqianye.miui2.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;

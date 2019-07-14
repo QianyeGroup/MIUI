@@ -1,9 +1,9 @@
-package cn.iqianye.miui.utils;
+package cn.iqianye.miui2.utils;
 import com.jaredrummler.android.shell.Shell;
 import android.os.Build;
 import com.stericson.RootTools.RootTools;
 import android.app.Activity;
-import cn.iqianye.miui.MainActivity;
+import cn.iqianye.miui2.MainActivity;
 import android.widget.Toast;
 import android.content.Context;
 

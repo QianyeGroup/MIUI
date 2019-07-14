@@ -1,4 +1,4 @@
-package cn.iqianye.miui;
+package cn.iqianye.miui2;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -14,11 +14,11 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
-import cn.iqianye.miui.utils.AssetsUtils;
-import cn.iqianye.miui.utils.OtherUtils;
-import cn.iqianye.miui.utils.RootUtils;
-import cn.iqianye.miui.utils.XmlUtils;
-import cn.iqianye.miui.utils.ZipUtils;
+import cn.iqianye.miui2.utils.AssetsUtils;
+import cn.iqianye.miui2.utils.OtherUtils;
+import cn.iqianye.miui2.utils.RootUtils;
+import cn.iqianye.miui2.utils.XmlUtils;
+import cn.iqianye.miui2.utils.ZipUtils;
 import com.jaredrummler.android.shell.Shell;
 import java.io.IOException;
 

@@ -1,4 +1,4 @@
-package cn.iqianye.miui.utils;
+package cn.iqianye.miui2.utils;
 
 import java.io.File;
 

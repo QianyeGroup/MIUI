@@ -5,11 +5,11 @@ android {
     buildToolsVersion "27.1.1"
 
     defaultConfig {
-        applicationId "cn.iqianye.miui"
+        applicationId "cn.iqianye.miui2"
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 1907120
-        versionName "1.0.6"
+        versionCode 1907140
+        versionName "2.0.0"
     }
     buildTypes {
         release {
