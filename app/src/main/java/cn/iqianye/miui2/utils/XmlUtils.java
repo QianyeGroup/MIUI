@@ -15,10 +15,16 @@ public class XmlUtils
         Document doc = DocumentHelper.createDocument();
         doc.setXMLEncoding("utf-8");
         Element root = doc.addElement("MIUI_Theme_Values");
-        Element el;
-        el = root.addElement("dimen");
-        el.addAttribute("name", "status_bar_height_portrait");
-        el.addText(height);
+        Element e1;
+        e1 = root.addElement("dimen");
+        e1.addAttribute("name", "status_bar_height");
+        e1.addText(height);
+        
+        Element e2;
+        e2 = root.addElement("dimen");
+        e2.addAttribute("name", "status_bar_height_portrait");
+        e2.addText(height);
+        
         OutputFormat format = new OutputFormat(null, true);
         XMLWriter output;
         try

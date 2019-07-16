@@ -1,231 +1,228 @@
 package cn.iqianye.miui2.utils;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Enumeration;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
 
-import org.apache.tools.zip.ZipEntry;
-import org.apache.tools.zip.ZipFile;
-import org.apache.tools.zip.ZipOutputStream;
+public class ZipUtils
+{
 
-public class ZipUtils {
+    public static void zip(String src, String dest) throws IOException
+    {
+        //提供了一个数据项压缩成一个ZIP归档输出流
+        ZipOutputStream out = null;
+        try
+        {
 
-	/**
-	 * 压缩
-	 * 
-	 * @param zipFileName
-	 *            压缩产生的zip包文件名--带路径,如果为null或空则默认按文件名生产压缩文件名
-	 * @param relativePath
-	 *            相对路径，默认为空
-	 * @param directory
-	 *            文件或目录的绝对路径
-	 * @throws FileNotFoundException
-	 * @throws IOException
-	 * @author yayagepei
-	 * @date --
-	 */
-	public static void zip(String zipFileName, String relativePath,
-			String directory) throws FileNotFoundException, IOException {
-		String fileName = zipFileName;
-		if (fileName == null || fileName.trim().equals("")) {
-			File temp = new File(directory);
-			if (temp.isDirectory()) {
-				fileName = directory + ".zip";
-			} else {
-				if (directory.indexOf(".") > 0) {
-					fileName = directory.substring(0,
-							directory.lastIndexOf("."))
-							+ "zip";
-				} else {
-					fileName = directory + ".zip";
-				}
-			}
-		}
-		ZipOutputStream zos = new ZipOutputStream(
-				new FileOutputStream(fileName));
-		zos.setEncoding("GBK");
-		try {
-			zip(zos, relativePath, directory);
-		} catch (IOException ex) {
-			throw ex;
-		} finally {
-			if (null != zos) {
-				zos.close();
-			}
-		}
-	}
+            File outFile = new File(dest);//源文件或者目录
+            File fileOrDirectory = new File(src);//压缩文件路径
+            out = new ZipOutputStream(new FileOutputStream(outFile));
+            //如果此文件是一个文件，否则为false。
+            if (fileOrDirectory.isFile())
+            {
+                zipFileOrDirectory(out, fileOrDirectory, "");
+            }
+            else
+            {
+                //返回一个文件或空阵列。
+                File[] entries = fileOrDirectory.listFiles();
+                for (int i = 0; i < entries.length; i++)
+                {
+                    // 递归压缩，更新curPaths
+                    zipFileOrDirectory(out, entries[i], "");
+                }
+            }
+        }
+        catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
+        finally
+        {
+            //关闭输出流
+            if (out != null)
+            {
+                try
+                {
+                    out.close();
+                }
+                catch (IOException ex)
+                {
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
 
-	/**
-	 * 压缩
-	 * 
-	 * @param zos
-	 *            压缩输出流
-	 * @param relativePath
-	 *            相对路径
-	 * @param absolutPath
-	 *            文件或文件夹绝对路径
-	 * @throws IOException
-	 * @author yayagepei
-	 * @date --
-	 */
-	private static void zip(ZipOutputStream zos, String relativePath,
-			String absolutPath) throws IOException {
-		File file = new File(absolutPath);
-		if (file.isDirectory()) {
-			File[] files = file.listFiles();
-			for (int i = 0; i < files.length; i++) {
-				File tempFile = files[i];
-				if (tempFile.isDirectory()) {
-					String newRelativePath = relativePath + tempFile.getName()
-							+ File.separator;
-					createZipNode(zos, newRelativePath);
-					zip(zos, newRelativePath, tempFile.getPath());
-				} else {
-					zipFile(zos, tempFile, relativePath);
-				}
-			}
-		} else {
-			zipFile(zos, file, relativePath);
-		}
-	}
+    private static void zipFileOrDirectory(ZipOutputStream out,
+                                           File fileOrDirectory, String curPath) throws IOException
+    {
+        //从文件中读取字节的输入流
+        FileInputStream in = null;
+        try
+        {
+            //如果此文件是一个目录，否则返回false。
+            if (!fileOrDirectory.isDirectory())
+            {
+                // 压缩文件
+                byte[] buffer = new byte[4096];
+                int bytes_read;
+                in = new FileInputStream(fileOrDirectory);
+                //实例代表一个条目内的ZIP归档
+                ZipEntry entry = new ZipEntry(curPath
+                                              + fileOrDirectory.getName());
+                //条目的信息写入底层流
+                out.putNextEntry(entry);
+                while ((bytes_read = in.read(buffer)) != -1)
+                {
+                    out.write(buffer, 0, bytes_read);
+                }
+                out.closeEntry();
+            }
+            else
+            {
+                // 压缩目录
+                File[] entries = fileOrDirectory.listFiles();
+                for (int i = 0; i < entries.length; i++)
+                {
+                    // 递归压缩，更新curPaths
+                    zipFileOrDirectory(out, entries[i], curPath
+                                       + fileOrDirectory.getName() + "/");
+                }
+            }
+        }
+        catch (IOException ex)
+        {
+            ex.printStackTrace();
+            // throw ex;
+        }
+        finally
+        {
+            if (in != null)
+            {
+                try
+                {
+                    in.close();
+                }
+                catch (IOException ex)
+                {
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
 
-	/**
-	 * 压缩文件
-	 * 
-	 * @param zos
-	 *            压缩输出流
-	 * @param file
-	 *            文件对象
-	 * @param relativePath
-	 *            相对路径
-	 * @throws IOException
-	 * @author yayagepei
-	 * @date --
-	 */
-	private static void zipFile(ZipOutputStream zos, File file,
-			String relativePath) throws IOException {
-		ZipEntry entry = new ZipEntry(relativePath + file.getName());
-		zos.putNextEntry(entry);
-		InputStream is = null;
-		try {
-			is = new FileInputStream(file);
-			int BUFFERSIZE = 2 << 10;
-			int length = 0;
-			byte[] buffer = new byte[BUFFERSIZE];
-			while ((length = is.read(buffer, 0, BUFFERSIZE)) >= 0) {
-				zos.write(buffer, 0, length);
-			}
-			zos.flush();
-			zos.closeEntry();
-		} catch (IOException ex) {
-			throw ex;
-		} finally {
-			if (null != is) {
-				is.close();
-			}
-		}
-	}
-
-	/**
-	 * 创建目录
-	 * 
-	 * @param zos
-	 *            zip输出流
-	 * @param relativePath
-	 *            相对路径
-	 * @throws IOException
-	 * @author yayagepei
-	 * @date --
-	 */
-	private static void createZipNode(ZipOutputStream zos, String relativePath)
-			throws IOException {
-		ZipEntry zipEntry = new ZipEntry(relativePath);
-		zos.putNextEntry(zipEntry);
-		zos.closeEntry();
-	}
-
-	/**
-	 * 解压缩zip包
-	 * 
-	 * @param zipFilePath
-	 *            zip文件路径
-	 * @param targetPath
-	 *            解压缩到的位置，如果为null或空字符串则默认解压缩到跟zip包同目录跟zip包同名的文件夹下
-	 * @throws IOException
-	 * @author yayagepei
-	 * @date --
-	 */
-	public static void unzip(String zipFilePath, String targetPath)
-			throws IOException {
-		OutputStream os = null;
-		InputStream is = null;
-		ZipFile zipFile = null;
-		try {
-			zipFile = new ZipFile(zipFilePath,"GBK");
-			String directoryPath = "";
-			if (null == targetPath || "".equals(targetPath)) {
-				directoryPath = zipFilePath.substring(0,
-						zipFilePath.lastIndexOf("."));
-			} else {
-				directoryPath = targetPath;
-			}
-			Enumeration entryEnum = zipFile.getEntries();
-			if (null != entryEnum) {
-				ZipEntry zipEntry = null;
-				while (entryEnum.hasMoreElements()) {
-					
-					String path = directoryPath;
-					zipEntry = (ZipEntry) entryEnum.nextElement();
-					if (zipEntry.isDirectory()) {
-						path = directoryPath + File.separator
-								+ zipEntry.getName();
-						System.out.println("directoryPath:"+path);
-						continue;
-					}
-					if (zipEntry.getSize() > 0) {
-						// 文件
-						File targetFile = FileUtil.buildFile(path
-								+ File.separator + zipEntry.getName(), false);
-						System.out.println("file Path:"+targetFile.getAbsolutePath());
-						System.out.println("file name:"+zipEntry.getName());
-						
-						os = new BufferedOutputStream(new FileOutputStream(
-								targetFile));
-						is = zipFile.getInputStream(zipEntry);
-						byte[] buffer = new byte[4096];
-						int readLen = 0;
-						while ((readLen = is.read(buffer, 0, 4096)) >= 0) {
-							os.write(buffer, 0, readLen);
-						}
-
-						os.flush();
-						os.close();
-					} else {
-						// 空目录
-						System.out.println("空目录");
-						FileUtil.buildFile(path + File.separator
-								+ zipEntry.getName(), true);
-					}
-				}
-			}
-		} catch (IOException ex) {
-			throw ex;
-		} finally {
-			if (null != zipFile) {
-				zipFile = null;
-			}
-			if (null != is) {
-				is.close();
-			}
-			if (null != os) {
-				os.close();
-			}
-		}
-	}
+    @SuppressWarnings("unchecked")
+    public static void unzip(String zipFileName, String outputDirectory)
+    throws IOException
+    {
+        ZipFile zipFile = null;
+        try
+        {
+            zipFile = new ZipFile(zipFileName);
+            Enumeration e = zipFile.entries();
+            ZipEntry zipEntry = null;
+            File dest = new File(outputDirectory);
+            dest.mkdirs();
+            while (e.hasMoreElements())
+            {
+                zipEntry = (ZipEntry) e.nextElement();
+                String entryName = zipEntry.getName();
+                InputStream in = null;
+                FileOutputStream out = null;
+                try
+                {
+                    if (zipEntry.isDirectory())
+                    {
+                        String name = zipEntry.getName();
+                        name = name.substring(0, name.length() - 1);
+                        File f = new File(outputDirectory + File.separator
+                                          + name);
+                        f.mkdirs();
+                    }
+                    else
+                    {
+                        int index = entryName.lastIndexOf("\\");
+                        if (index != -1)
+                        {
+                            File df = new File(outputDirectory + File.separator
+                                               + entryName.substring(0, index));
+                            df.mkdirs();
+                        }
+                        index = entryName.lastIndexOf("/");
+                        if (index != -1)
+                        {
+                            File df = new File(outputDirectory + File.separator
+                                               + entryName.substring(0, index));
+                            df.mkdirs();
+                        }
+                        File f = new File(outputDirectory + File.separator
+                                          + zipEntry.getName());
+                        // f.createNewFile();
+                        in = zipFile.getInputStream(zipEntry);
+                        out = new FileOutputStream(f);
+                        int c;
+                        byte[] by = new byte[1024];
+                        while ((c = in.read(by)) != -1)
+                        {
+                            out.write(by, 0, c);
+                        }
+                        out.flush();
+                    }
+                }
+                catch (IOException ex)
+                {
+                    ex.printStackTrace();
+                    throw new IOException("解压失败：" + ex.toString());
+                }
+                finally
+                {
+                    if (in != null)
+                    {
+                        try
+                        {
+                            in.close();
+                        }
+                        catch (IOException ex)
+                        {
+                        }
+                    }
+                    if (out != null)
+                    {
+                        try
+                        {
+                            out.close();
+                        }
+                        catch (IOException ex)
+                        {
+                        }
+                    }
+                }
+            }
+        }
+        catch (IOException ex)
+        {
+            ex.printStackTrace();
+            throw new IOException("解压失败：" + ex.toString());
+        }
+        finally
+        {
+            if (zipFile != null)
+            {
+                try
+                {
+                    zipFile.close();
+                }
+                catch (IOException ex)
+                {
+                }
+            }
+        }
+    }
 }

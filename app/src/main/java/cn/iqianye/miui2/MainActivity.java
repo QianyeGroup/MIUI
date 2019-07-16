@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity
             XmlUtils.xmlSave(filename, height.getText().toString() + "dp");
             try
             {
-                ZipUtils.zip(path + "/framework-res", "", filename);
+                ZipUtils.zip(filename, path + "/framework-res");
             }
             catch (IOException e)
             {
@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity
         {
             Shell.SU.run("cp -r " + path + "/framework-res /system/media/theme/default/");
             Shell.SU.run("chmod 644 /system/media/theme/default/framework-res");
-            Toast.makeText(this,R.string.change_success_system, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.change_success_system, Toast.LENGTH_LONG).show();
         }
         else if (magisk.isChecked())
         {
@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity
             Shell.SU.run("cp -r " + path + "/Z-MiuiStatusBar /data/adb/modules");
             Shell.SU.run("chmod 644 /data/adb/modules/Z-MiuiStatusBar/system/media/theme/default/framework-res");
             Shell.SU.run("chmod 644 /data/adb/modules/Z-MiuiStatusBar/module.prop");
-            Toast.makeText(this,R.string.change_success_magisk, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.change_success_magisk, Toast.LENGTH_LONG).show();
         }
     }
     public void delete_onClick(View view)
