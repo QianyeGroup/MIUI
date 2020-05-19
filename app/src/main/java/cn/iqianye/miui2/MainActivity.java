@@ -21,6 +21,7 @@ import cn.iqianye.miui2.utils.XmlUtils;
 import cn.iqianye.miui2.utils.ZipUtils;
 import com.jaredrummler.android.shell.Shell;
 import java.io.IOException;
+import cn.iqianye.miui2.utils.DownloadUtils;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -110,7 +111,16 @@ public class MainActivity extends AppCompatActivity
                 b3.show();   
                 break;
             case R.id.join_Group:
-                joinQQGroup("POi0sGneG6tKk4sDLTHDevyaIFWH6C4a");
+                new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String groupPath = getExternalCacheDir().getAbsolutePath();
+                            DownloadUtils d = new DownloadUtils();
+                            d.downLoad("https://api.zhenxin.xyz/group/zhenxin.group", groupPath, ".group");
+                            String group = Shell.SH.run("cat " + groupPath + "/.group").toString();
+                            joinQQGroup(group);
+                        }
+                    }).start();
                 break;
             case R.id.feedback:
                 Intent data=new Intent(Intent.ACTION_SENDTO);  
@@ -139,7 +149,9 @@ public class MainActivity extends AppCompatActivity
         RadioButton system = findViewById(R.id.systemMode_radioButton);
         RadioButton magisk = findViewById(R.id.magiskMode_radioButton);
         EditText height = findViewById(R.id.height_editText);
-        String path = getExternalCacheDir().getAbsolutePath();
+        String path = getExternalCacheDir().getAbsolutePath() + "/tmp";
+        Shell.SU.run("rm -rf " + path);
+        Shell.SU.run("mkdir -p " + path + "/nightmode");
         String filename = path + "/theme_values.xml";
         if (height.getText().toString().trim().isEmpty())
         {
@@ -149,9 +161,11 @@ public class MainActivity extends AppCompatActivity
         else
         {
             XmlUtils.xmlSave(filename, height.getText().toString() + "dp");
+            Shell.SU.run("cp -r " + path + "/theme_values.xml " + path + "/nightmode/");
+            path = getExternalCacheDir().getAbsolutePath();
             try
             {
-                ZipUtils.zip(filename, path + "/framework-res");
+                ZipUtils.zip(path + "/tmp", path + "/framework-res");
             }
             catch (IOException e)
             {
@@ -223,9 +237,8 @@ public class MainActivity extends AppCompatActivity
 
     /****************
      *
-     * 发起添加群流程。群号：真心极客 - Redmi K20/Pro |(691802087) 的 key 为： POi0sGneG6tKk4sDLTHDevyaIFWH6C4a
-     * 调用 joinQQGroup(POi0sGneG6tKk4sDLTHDevyaIFWH6C4a) 即可发起手Q客户端申请加群 真心极客 - Redmi K20/Pro |(691802087)
-     *
+     * 发起添加群流程。
+     * 
      * @param key 由官网生成的key
      * @return 返回true表示呼起手Q成功，返回false表示呼起失败
      ******************/
